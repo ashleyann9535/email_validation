@@ -1,0 +1,12 @@
+ul{
+    list-style: none;
+    line-height: 20px;
+}
+
+ul button{
+    margin: 20px;
+}
+
+.box{
+    width: 200px;
+}
