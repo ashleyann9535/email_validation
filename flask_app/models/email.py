@@ -36,6 +36,17 @@ class Email:
             emails.append(cls(email))
         return emails
 
+    @classmethod
+    def get_by_email(cls, email):
+        data = {'email': email}
+        query = """
+        SELECT * FROM emails WHERE %(email)s
+        ;"""
+        result = connectToMySQL(Email.db).query_db(query, data)
+        if result:
+            result = cls(result[0])
+        return result
+
 #Update 
 
 
@@ -54,6 +65,9 @@ class Email:
     def validate_email(email):
         EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$')
         is_valid = True
+        if Email.get_by_email(email['email'].lower()):
+            flash('Email already in use.')
+            is_valid = False
         if not EMAIL_REGEX.match(email['email']):
             flash('Invalid email address!')
             is_valid = False
